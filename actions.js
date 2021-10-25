@@ -26,3 +26,21 @@ export function $1(code) {
 
 	return print(ast).code;
 }
+
+export function detectAvailableActions(code) {
+	const ast = parse(code);
+	const actions = [];
+
+	visit(ast, {
+		visitIfStatement({node}) {
+			if (node.consequent.type !== 'BlockStatement') {
+				actions.push({id: 1, description: mappings.$1});
+				return false;
+			}
+
+			this.traverse();
+		}
+	});
+
+	return JSON.stringify(actions);
+}
